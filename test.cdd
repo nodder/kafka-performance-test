@@ -1,0 +1,1 @@
+3 | {"metric":"cdd.test","tags":{"cdd":"mms","test":"xx01"},"timestamp":$$NOW-LONG$$,"value":"[[100, +10]]"}
