@@ -1,1 +1,0 @@
-1 | {"metric":"cdd.test","tags":{"cdd":"mms","test":"xx01"},"timestamp":$$NOW-LONG$$,"value":"[[1, +1]]"}

@@ -1,4 +1,0 @@
-17/11/06 08:02:47 WARN PFTestMain: bootstrapServers=hadoop2:9092,hadoop3:9092,hadoop4:9092; kafkaTopic=pre_ss
-17/11/06 08:02:47 WARN PFTestMain: threadNum=1; numberPerBatch=1
-17/11/06 08:02:47 WARN CddMesageSource: Intializing source from file data.cdd...
-17/11/06 08:02:47 INFO KafkaSendingTask: sending message: {"metric":"cdd.test","tags":{"cdd":"mms","test":"xx01"},"timestamp":1509926567495,"value":"100"}

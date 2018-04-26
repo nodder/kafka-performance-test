@@ -1,7 +1,10 @@
 package name.cdd.product.kafka.pftest.messagesource;
 
+import static java.lang.System.out;
+
+import java.util.stream.IntStream;
+
 import junit.framework.TestCase;
-import name.cdd.product.kafka.pftest.messagesource.CddSmartDataParser;
 
 public class CddSmartDataParserTest extends TestCase
 {
@@ -95,5 +98,21 @@ public class CddSmartDataParserTest extends TestCase
         assertEquals("{\"total_in_quantity\":1,\"second_auth_percent\":\"1\",\"second_in_quantity\":1,\"time\":\"2017-10-19 23:37:55\",\"event\":\"pdaRealtimeEveryCase\",\"emp_name\":\"A139980\",\"emp_id\":\"A139980\",\"event_id\":\"1000\",\"type\":\"pdaRealtimeEveryCaseDetail\",\"group\":\"1D\",\"channel\":\"1\",\"city\":\"018\",\"event_id\":\"18\"}", sdp.next());
         assertEquals("{\"total_in_quantity\":3,\"second_auth_percent\":\"51\",\"second_in_quantity\":2,\"time\":\"2017-10-19 23:37:55\",\"event\":\"pdaRealtimeEveryCase\",\"emp_name\":\"A139980\",\"emp_id\":\"A139980\",\"event_id\":\"1001\",\"type\":\"pdaRealtimeEveryCaseDetail\",\"group\":\"1D\",\"channel\":\"1\",\"city\":\"018\",\"event_id\":\"18\"}", sdp.next());
         assertEquals("{\"total_in_quantity\":5,\"second_auth_percent\":\"1\",\"second_in_quantity\":3,\"time\":\"2017-10-19 23:37:55\",\"event\":\"pdaRealtimeEveryCase\",\"emp_name\":\"A139980\",\"emp_id\":\"A139980\",\"event_id\":\"1002\",\"type\":\"pdaRealtimeEveryCaseDetail\",\"group\":\"1D\",\"channel\":\"1\",\"city\":\"018\",\"event_id\":\"18\"}", sdp.next());
+    }
+    
+    public void testSmartDataParser_random()
+    {
+        String data = "{\"name\":\"bbb\", \"value\":[[10, R, 100]]}";
+        
+        CddSmartDataParser sdp = new CddSmartDataParser(data);
+        
+        assertEquals("{\"name\":\"bbb\", \"value\":10}", sdp.next());
+        
+        //测试200次，验证每次的随机值都在范围之内
+        IntStream.range(0, 200)
+                 .mapToObj(i -> sdp.next())
+                 .peek(out::println)
+                 .map(nextParseResult -> Integer.parseInt(nextParseResult.substring("{\"name\":\"bbb\", \"value\":".length(), nextParseResult.length() - 1)))
+                 .forEach(actualRandomNum -> assertTrue(10 <= actualRandomNum && actualRandomNum <= 100));
     }
 }

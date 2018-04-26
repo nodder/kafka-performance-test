@@ -98,11 +98,10 @@ public class CddSmartDataParser
             String stripedData = data.substring(2, data.length() - 2);
             
             String[] splittedStriptedData = stripedData.split(",");
-            this.currNum = parseNum(splittedStriptedData[0]);
-            this.intOper = parseIntOper(splittedStriptedData[1]);
-            
             this.opMaxNum = splittedStriptedData.length == 3 ? Optional.of(parseNum(splittedStriptedData[2])) : Optional.empty();
+            this.currNum = parseNum(splittedStriptedData[0]);
             this.initNum = currNum;
+            this.intOper = parseIntOper(splittedStriptedData[1]);
         }
 
         public int nextInt()
@@ -131,23 +130,29 @@ public class CddSmartDataParser
         private IntUnaryOperator parseIntOper(String data)
         {
             String operator_and_operand = data.trim();
-            char oper = operator_and_operand.charAt(0);
-            int operand = Integer.parseInt(operator_and_operand.substring(1));
-            return parseIntOperWithCleanData(oper, operand);
+            return parseIntOperWithCleanData(operator_and_operand);
         }
 
-        private IntUnaryOperator parseIntOperWithCleanData(char oper, int operand)
+        private IntUnaryOperator parseIntOperWithCleanData(String operator_and_operand)
         {
+            char oper = operator_and_operand.charAt(0);
+            
             if(oper == '+')
             {
+                int operand = Integer.parseInt(operator_and_operand.substring(1));
                 return x -> x + operand;
             }
             else if(oper == '-')
             {
+                int operand = Integer.parseInt(operator_and_operand.substring(1));
                 return x -> x - operand;
             }
+            else if(oper == 'R' || oper == 'r')
+            {
+                return x -> (int) (Math.random() * (this.opMaxNum.get() - this.initNum)) + this.initNum;  
+            }
             
-            throw new RuntimeException("parseIntOperWithCleanData not supported: " + oper + ":" + operand);
+            throw new RuntimeException("parseIntOperWithCleanData not supported: " + operator_and_operand);
         }
     }
 }
